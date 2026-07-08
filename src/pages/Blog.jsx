@@ -84,8 +84,8 @@ function Blog({ limite = null }) {
     <div className="max-w-6xl mx-auto px-6 py-16">
 
       <div className="text-center mb-12">
-        <p className="text-yellow-400 text-sm tracking-widest uppercase mb-2">Recursos y noticias</p>
-        <h1 className="text-5xl font-bold text-white">Blog</h1>
+        <p className="text-yellow-400 text-sm tracking-widest uppercase mb-2">La historia de los metales preciosos</p>
+        <h1 className="text-5xl font-bold text-white">Historia</h1>
       </div>
 
       {!limite && (

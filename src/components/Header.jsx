@@ -102,7 +102,7 @@ function Header() {
             )}
           </div>
 
-          <Link to="/blog" className="hover:text-yellow-400 transition-colors">Blog</Link>
+          <Link to="/blog" className="hover:text-yellow-400 transition-colors">Historia</Link>
           <Link to="/contacto" className="hover:text-yellow-400 transition-colors">Contacto</Link>
 
           {estaLogueado ? (
@@ -136,7 +136,7 @@ function Header() {
           <Link to="/precios" onClick={() => setMenuMovil(false)} className="hover:text-yellow-400 transition-colors py-1">Precios</Link>
           <Link to="/rentabilidad" onClick={() => setMenuMovil(false)} className="hover:text-yellow-400 transition-colors py-1">Calculadora</Link>
           <Link to="/comparador" onClick={() => setMenuMovil(false)} className="hover:text-yellow-400 transition-colors py-1">Comparador</Link>
-          <Link to="/blog" onClick={() => setMenuMovil(false)} className="hover:text-yellow-400 transition-colors py-1">Blog</Link>
+          <Link to="/blog" onClick={() => setMenuMovil(false)} className="hover:text-yellow-400 transition-colors py-1">Historia</Link>
           <Link to="/contacto" onClick={() => setMenuMovil(false)} className="hover:text-yellow-400 transition-colors py-1">Contacto</Link>
           {estaLogueado ? (
             <button onClick={cerrarSesion} className="text-left text-zinc-400 hover:text-yellow-400 transition-colors py-1">
