@@ -1,10 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useInView } from 'framer-motion'
-import { useRef } from 'react'
-
-const categorias = ['Todos', 'Historia', 'Oro', 'Plata', 'Platino']
 
 function ArticuloCard({ articulo, index }) {
   const ref = useRef(null)
@@ -18,16 +15,17 @@ function ArticuloCard({ articulo, index }) {
       transition={{ duration: 0.5, delay: index * 0.1 }}
       className="bg-zinc-900 border border-zinc-800 hover:border-yellow-400/30 transition-colors group cursor-pointer"
     >
-      <div className="h-48 overflow-hidden">
+      <div className="h-48 overflow-hidden bg-zinc-800">
         {articulo.imagen ? (
           <img
             src={articulo.imagen}
             alt={articulo.titulo}
+            onError={(e) => { e.target.style.display = 'none'; e.target.parentElement.classList.add('flex', 'items-center', 'justify-center') }}
             className="w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
           />
         ) : (
-          <div className="w-full h-full bg-zinc-800 flex items-center justify-center">
-            <span className="text-zinc-600 text-4xl">📰</span>
+          <div className="w-full h-full flex items-center justify-center">
+            <span className="text-5xl">📜</span>
           </div>
         )}
       </div>
@@ -62,21 +60,17 @@ function ArticuloCard({ articulo, index }) {
 
 function Blog({ limite = null }) {
   const [articulos, setArticulos] = useState([])
-  const [categoriaActiva, setCategoriaActiva] = useState('Todos')
   const [cargando, setCargando] = useState(true)
 
   useEffect(() => {
-    const params = new URLSearchParams()
-    if (categoriaActiva !== 'Todos') params.append('categoria', categoriaActiva)
-
-    fetch(`${import.meta.env.VITE_API_URL}/api/articulos?${params}`)
+    fetch(`${import.meta.env.VITE_API_URL}/api/articulos`)
       .then((res) => res.json())
       .then((data) => {
-        setArticulos(data)
+        setArticulos(Array.isArray(data) ? data : [])
         setCargando(false)
       })
       .catch(() => setCargando(false))
-  }, [categoriaActiva])
+  }, [])
 
   const articulosMostrados = limite ? articulos.slice(0, limite) : articulos
 
@@ -87,24 +81,6 @@ function Blog({ limite = null }) {
         <p className="text-yellow-400 text-sm tracking-widest uppercase mb-2">La historia de los metales preciosos</p>
         <h1 className="text-5xl font-bold text-white">Historia</h1>
       </div>
-
-      {!limite && (
-        <div className="flex gap-2 flex-wrap mb-10">
-          {categorias.map((c) => (
-            <button
-              key={c}
-              onClick={() => setCategoriaActiva(c)}
-              className={`px-5 py-2 text-sm border transition-colors ${
-                categoriaActiva === c
-                  ? 'bg-yellow-400 text-black border-yellow-400 font-semibold'
-                  : 'border-zinc-700 text-zinc-400 hover:border-yellow-400 hover:text-yellow-400'
-              }`}
-            >
-              {c}
-            </button>
-          ))}
-        </div>
-      )}
 
       {cargando ? (
         <div className="text-center py-20 text-zinc-500">Cargando artículos...</div>
@@ -122,7 +98,7 @@ function Blog({ limite = null }) {
             to="/blog"
             className="border border-yellow-400 text-yellow-400 px-10 py-3 hover:bg-yellow-400/10 transition-colors tracking-widest uppercase text-sm"
           >
-            Ver todos los artículos
+            Ver toda la historia
           </Link>
         </div>
       )}
