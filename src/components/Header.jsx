@@ -49,7 +49,7 @@ function Header() {
             <span key={p.nombre} className="text-zinc-400 whitespace-nowrap">
               {p.nombre}{' '}
               <span className="text-yellow-400 font-semibold">
-                {p.precio ? p.precio.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '---'} €/oz
+                {p.precio ? (p.precio / 31.1035).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '---'} €/g
               </span>
               {p.variacionPct !== undefined && (
                 <span className={`ml-1 text-xs ${p.variacionPct >= 0 ? 'text-green-400' : 'text-red-400'}`}>
