@@ -24,7 +24,10 @@ function Catalogo({ limite = null }) {
     if (tipoActivo !== "Todos") params.append("tipo", tipoActivo)
 
     setCargando(true)
-    fetch(`${import.meta.env.VITE_API_URL}/api/productos?${params}`)
+    const token = localStorage.getItem('clienteToken')
+    const headers = token ? { Authorization: `Bearer ${token}` } : {}
+
+    fetch(`${import.meta.env.VITE_API_URL}/api/productos?${params}`, { headers })
       .then((res) => res.json())
       .then((data) => {
         setProductos(data)
@@ -178,7 +181,7 @@ function Catalogo({ limite = null }) {
                           <span>{p.pureza}</span>
                         </div>
                         <div className="flex items-center justify-between">
-                          <PrecioProtegido precio={`${p.precio.toLocaleString('es-ES')} €`} className="text-yellow-400 text-lg font-bold" />
+                          <PrecioProtegido precio={p.precio ? `${p.precio.toLocaleString('es-ES')} €` : ''} className="text-yellow-400 text-lg font-bold" />
                           <button
                             onClick={(e) => { e.stopPropagation(); navigate(`/producto/${p.id}`) }}
                             className="text-xs border border-zinc-700 text-zinc-400 px-3 py-1.5 hover:border-yellow-400 hover:text-yellow-400 transition-colors"
@@ -230,7 +233,7 @@ function Catalogo({ limite = null }) {
                         </div>
                       </div>
                       <div className="text-right flex-shrink-0">
-                        <PrecioProtegido precio={`${p.precio.toLocaleString('es-ES')} €`} className="text-yellow-400 text-xl font-bold" />
+                        <PrecioProtegido precio={p.precio ? `${p.precio.toLocaleString('es-ES')} €` : ''} className="text-yellow-400 text-lg font-bold" />
                         <button
                           onClick={(e) => { e.stopPropagation(); navigate(`/producto/${p.id}`) }}
                           className="text-xs border border-zinc-700 text-zinc-400 px-3 py-1.5 hover:border-yellow-400 hover:text-yellow-400 transition-colors mt-2"

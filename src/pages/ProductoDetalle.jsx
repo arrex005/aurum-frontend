@@ -9,7 +9,10 @@ function ProductoDetalle() {
   const [cargando, setCargando] = useState(true)
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/api/productos/${id}`)
+    const token = localStorage.getItem('clienteToken')
+    const headers = token ? { Authorization: `Bearer ${token}` } : {}
+
+    fetch(`${import.meta.env.VITE_API_URL}/api/productos/${id}`, { headers })
       .then((res) => res.json())
       .then((data) => {
         setProducto(data)
@@ -65,7 +68,11 @@ function ProductoDetalle() {
 
           <div className="bg-zinc-900 border border-zinc-800 p-6 mb-6">
             <p className="text-zinc-400 text-xs uppercase tracking-widest mb-1">Precio actual</p>
-            <PrecioProtegido precio={`${producto.precio.toLocaleString('es-ES')} €`} className="text-yellow-400 text-4xl font-bold" />
+            <PrecioProtegido 
+              precio={producto.precio ? `${producto.precio.toLocaleString('es-ES')} €` : ''} 
+              className="text-yellow-400 text-4xl font-bold" 
+              tamano="grande"
+            />
             <p className="text-zinc-500 text-xs mt-1">Precio orientativo, consulte para precio exacto</p>
           </div>
 

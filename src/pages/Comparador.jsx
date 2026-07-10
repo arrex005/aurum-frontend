@@ -7,9 +7,13 @@ function Comparador() {
   const [seleccionB, setSeleccionB] = useState('')
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/api/productos`)
+    const token = localStorage.getItem('clienteToken')
+    const headers = token ? { Authorization: `Bearer ${token}` } : {}
+
+    fetch(`${import.meta.env.VITE_API_URL}/api/productos`, { headers })
       .then((res) => res.json())
-      .then((data) => setProductos(data))
+      .then((data) => setProductos(Array.isArray(data) ? data : []))
+      .catch(() => setProductos([]))
   }, [])
 
   const productoA = productos.find((p) => p.id === Number(seleccionA))
@@ -20,8 +24,10 @@ function Comparador() {
     { label: 'Tipo', key: 'tipo' },
     { label: 'Peso', key: 'peso' },
     { label: 'Pureza', key: 'pureza' },
-    { label: 'Precio', key: 'precio', format: (v) => `${v.toLocaleString('es-ES')} €` },
+    { label: 'Precio', key: 'precio', format: (v) => v ? `${v.toLocaleString('es-ES')} €` : 'Inicia sesión' },
   ]
+
+  const hayPrecios = productoA?.precio && productoB?.precio
 
   return (
     <div className="max-w-5xl mx-auto px-6 py-16">
@@ -79,36 +85,38 @@ function Comparador() {
             </div>
 
             {campos.map((campo, i) => (
-              <>
-                <div key={`label-${i}`} className="p-4 border-t border-r border-zinc-800">
+              <div key={`fila-${i}`} className="contents">
+                <div className="p-4 border-t border-r border-zinc-800">
                   <p className="text-zinc-400 text-sm">{campo.label}</p>
                 </div>
-                <div key={`a-${i}`} className="p-4 border-t border-r border-zinc-800 text-center">
+                <div className="p-4 border-t border-r border-zinc-800 text-center">
                   <p className={`text-sm font-semibold ${
-                    campo.key === 'precio'
+                    campo.key === 'precio' && hayPrecios
                       ? productoA.precio < productoB.precio ? 'text-green-400' : 'text-white'
                       : 'text-white'
                   }`}>
                     {campo.format ? campo.format(productoA[campo.key]) : productoA[campo.key]}
                   </p>
                 </div>
-                <div key={`b-${i}`} className="p-4 border-t border-zinc-800 text-center">
+                <div className="p-4 border-t border-zinc-800 text-center">
                   <p className={`text-sm font-semibold ${
-                    campo.key === 'precio'
+                    campo.key === 'precio' && hayPrecios
                       ? productoB.precio < productoA.precio ? 'text-green-400' : 'text-white'
                       : 'text-white'
                   }`}>
                     {campo.format ? campo.format(productoB[campo.key]) : productoB[campo.key]}
                   </p>
                 </div>
-              </>
+              </div>
             ))}
 
           </div>
 
           <div className="mt-6 p-6 bg-zinc-900 border border-zinc-800">
             <p className="text-zinc-400 text-sm text-center">
-              {productoA.precio < productoB.precio
+              {!hayPrecios
+                ? 'Inicia sesión para comparar los precios'
+                : productoA.precio < productoB.precio
                 ? `${productoA.nombre} es ${(productoB.precio - productoA.precio).toLocaleString('es-ES')} € más barato`
                 : productoB.precio < productoA.precio
                 ? `${productoB.nombre} es ${(productoA.precio - productoB.precio).toLocaleString('es-ES')} € más barato`

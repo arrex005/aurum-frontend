@@ -4,7 +4,6 @@ import Header from './components/Header'
 import Footer from './components/Footer'
 import Cursor from './components/Cursor'
 import Rentabilidad from './pages/Rentabilidad'
-import useGoldConfetti from './components/Confetti'
 import Home from './pages/Home'
 import Blog from './pages/Blog'
 import TestimoniosPage from './pages/TestimoniosPage'
@@ -55,7 +54,7 @@ const PageWrapper = ({ children }) => (
 
 function App() {
   const location = useLocation()
-  useGoldConfetti()
+  
 
   return (
     <div className="bg-black min-h-screen text-white" style={{ cursor: 'none' }}>

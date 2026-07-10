@@ -3,3 +3,7 @@ html, body {
   overflow-x: hidden;
   max-width: 100%;
 }
+/* Ocultar el cursor nativo en toda la web, incluidos botones y enlaces */
+*, *::before, *::after {
+  cursor: none !important;
+}
