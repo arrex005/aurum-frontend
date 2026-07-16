@@ -23,10 +23,15 @@ function Piedras() {
   const [hayMas, setHayMas] = useState(false)
   const navigate = useNavigate()
 
-  // Al cambiar cualquier filtro, volvemos a la primera página
+ // Al cambiar cualquier filtro, volvemos a la primera página
   useEffect(() => {
     setPagina(1)
   }, [forma, quilatesMin, quilatesMax])
+
+  // Subir arriba solo al cambiar de página
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [pagina])
 
   useEffect(() => {
     setCargando(true)
@@ -41,7 +46,7 @@ function Piedras() {
         setPiedras(Array.isArray(data.items) ? data.items : [])
         setHayMas(!!data.hayMas)
         setCargando(false)
-        window.scrollTo({ top: 0, behavior: 'smooth' })
+        
       })
       .catch(() => setCargando(false))
   }, [forma, quilatesMin, quilatesMax, pagina])

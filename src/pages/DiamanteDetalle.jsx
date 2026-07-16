@@ -20,7 +20,10 @@ function DiamanteDetalle() {
   const [mostrarVideo, setMostrarVideo] = useState(false)
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/api/piedras/${encodeURIComponent(id)}`)
+    const token = localStorage.getItem('clienteToken')
+    const headers = token ? { Authorization: `Bearer ${token}` } : {}
+
+    fetch(`${import.meta.env.VITE_API_URL}/api/piedras/${encodeURIComponent(id)}`, { headers })
       .then((res) => res.json())
       .then((data) => {
         setPiedra(data)
@@ -91,8 +94,7 @@ function DiamanteDetalle() {
           <div className="bg-zinc-900 border border-zinc-800 p-6 mb-6">
             <p className="text-zinc-400 text-xs uppercase tracking-widest mb-1">Precio</p>
             <PrecioProtegido
-              precio={`${(piedra.price / 100).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €`}
-              className="text-yellow-400 text-4xl font-bold"
+              precio={piedra.price ? `${(piedra.price / 100).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €` : ''}
             />
           </div>
 
