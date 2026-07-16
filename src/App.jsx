@@ -13,6 +13,7 @@ import Contacto from './pages/Contacto'
 import Precios from './pages/Precios'
 import SobreNosotros from './pages/SobreNosotros'
 import { useEffect } from 'react'
+import ModalBienvenida from './components/ModalBienvenida'
 import FAQ from './pages/FAQ'
 import NotFound from './pages/NotFound'
 import LoadingScreen from './components/LoadingScreen'
@@ -59,6 +60,7 @@ function App() {
   return (
     <div className="bg-black min-h-screen text-white" style={{ cursor: 'none' }}>
       <Cursor />
+      <ModalBienvenida />
       <LoadingScreen />
       <ScrollToTop />
       <Header />

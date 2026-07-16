@@ -19,27 +19,32 @@ function Piedras() {
   const [forma, setForma] = useState('ROUND')
   const [quilatesMin, setQuilatesMin] = useState(0.5)
   const [quilatesMax, setQuilatesMax] = useState(2)
+  const [pagina, setPagina] = useState(1)
+  const [hayMas, setHayMas] = useState(false)
   const navigate = useNavigate()
 
-  const cargarPiedras = () => {
-    setCargando(true)
-    const params = new URLSearchParams({
-      forma,
-      quilatesMin,
-      quilatesMax,
-    })
-    fetch(`${import.meta.env.VITE_API_URL}/api/piedras?${params}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setPiedras(Array.isArray(data) ? data : [])
-        setCargando(false)
-      })
-      .catch(() => setCargando(false))
-  }
+  // Al cambiar cualquier filtro, volvemos a la primera página
+  useEffect(() => {
+    setPagina(1)
+  }, [forma, quilatesMin, quilatesMax])
 
   useEffect(() => {
-    cargarPiedras()
-  }, [forma, quilatesMin, quilatesMax])
+    setCargando(true)
+    const token = localStorage.getItem('clienteToken')
+    const headers = token ? { Authorization: `Bearer ${token}` } : {}
+
+    const params = new URLSearchParams({ forma, quilatesMin, quilatesMax, pagina })
+
+    fetch(`${import.meta.env.VITE_API_URL}/api/piedras?${params}`, { headers })
+      .then((res) => res.json())
+      .then((data) => {
+        setPiedras(Array.isArray(data.items) ? data.items : [])
+        setHayMas(!!data.hayMas)
+        setCargando(false)
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      })
+      .catch(() => setCargando(false))
+  }, [forma, quilatesMin, quilatesMax, pagina])
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-16">
@@ -79,29 +84,17 @@ function Piedras() {
             <label className="text-zinc-400 text-xs uppercase tracking-widest mb-2 block">
               Quilates mínimo: <span className="text-yellow-400">{quilatesMin} ct</span>
             </label>
-            <input
-              type="range"
-              min={0.3}
-              max={5}
-              step={0.1}
-              value={quilatesMin}
+            <input type="range" min={0.3} max={5} step={0.1} value={quilatesMin}
               onChange={(e) => setQuilatesMin(Number(e.target.value))}
-              className="w-full accent-yellow-400"
-            />
+              className="w-full accent-yellow-400" />
           </div>
           <div>
             <label className="text-zinc-400 text-xs uppercase tracking-widest mb-2 block">
               Quilates máximo: <span className="text-yellow-400">{quilatesMax} ct</span>
             </label>
-            <input
-              type="range"
-              min={0.3}
-              max={5}
-              step={0.1}
-              value={quilatesMax}
+            <input type="range" min={0.3} max={5} step={0.1} value={quilatesMax}
               onChange={(e) => setQuilatesMax(Number(e.target.value))}
-              className="w-full accent-yellow-400"
-            />
+              className="w-full accent-yellow-400" />
           </div>
         </div>
       </div>
@@ -114,14 +107,17 @@ function Piedras() {
         </div>
       ) : (
         <>
-          <p className="text-zinc-500 text-sm mb-6">{piedras.length} diamantes encontrados</p>
+          <p className="text-zinc-500 text-sm mb-6">
+            Mostrando {piedras.length} diamantes · Página {pagina}
+          </p>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {piedras.map((p, i) => (
               <motion.div
                 key={p.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: i * 0.03 }}
+                transition={{ duration: 0.3, delay: i * 0.02 }}
                 onClick={() => navigate(`/diamante/${encodeURIComponent(p.id)}`)}
                 className="bg-zinc-900 border border-zinc-800 hover:border-yellow-400/50 transition-colors group cursor-pointer"
               >
@@ -151,20 +147,20 @@ function Piedras() {
                   <div className="grid grid-cols-3 gap-2 mb-4 text-center">
                     <div className="bg-zinc-800 py-2">
                       <p className="text-zinc-500 text-xs">Color</p>
-                      <p className="text-white text-sm font-semibold">{p.diamond?.certificate?.color}</p>
+                      <p className="text-white text-sm font-semibold">{p.diamond?.certificate?.color || '—'}</p>
                     </div>
                     <div className="bg-zinc-800 py-2">
                       <p className="text-zinc-500 text-xs">Pureza</p>
-                      <p className="text-white text-sm font-semibold">{p.diamond?.certificate?.clarity}</p>
+                      <p className="text-white text-sm font-semibold">{p.diamond?.certificate?.clarity || '—'}</p>
                     </div>
                     <div className="bg-zinc-800 py-2">
                       <p className="text-zinc-500 text-xs">Talla</p>
-                      <p className="text-white text-sm font-semibold">{p.diamond?.certificate?.cut}</p>
+                      <p className="text-white text-sm font-semibold">{p.diamond?.certificate?.cut || '—'}</p>
                     </div>
                   </div>
                   <div className="flex items-center justify-between">
                     <PrecioProtegido
-                      precio={`${(p.price / 100).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €`}
+                      precio={p.price ? `${(p.price / 100).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €` : ''}
                       className="text-yellow-400 text-lg font-bold"
                     />
                     <span className="text-xs border border-zinc-700 text-zinc-400 px-3 py-1.5 group-hover:border-yellow-400 group-hover:text-yellow-400 transition-colors">
@@ -174,6 +170,24 @@ function Piedras() {
                 </div>
               </motion.div>
             ))}
+          </div>
+
+          <div className="flex items-center justify-center gap-4 mt-10">
+            <button
+              onClick={() => setPagina((p) => Math.max(1, p - 1))}
+              disabled={pagina === 1}
+              className="px-6 py-3 border border-zinc-700 text-zinc-400 hover:border-yellow-400 hover:text-yellow-400 transition-colors disabled:opacity-30 disabled:cursor-not-allowed text-sm"
+            >
+              ← Anterior
+            </button>
+            <span className="text-zinc-500 text-sm">Página {pagina}</span>
+            <button
+              onClick={() => setPagina((p) => p + 1)}
+              disabled={!hayMas}
+              className="px-6 py-3 border border-zinc-700 text-zinc-400 hover:border-yellow-400 hover:text-yellow-400 transition-colors disabled:opacity-30 disabled:cursor-not-allowed text-sm"
+            >
+              Siguiente →
+            </button>
           </div>
         </>
       )}
