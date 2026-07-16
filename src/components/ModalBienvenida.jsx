@@ -51,8 +51,7 @@ function ModalBienvenida() {
               </button>
 
               <div className="text-center mb-6">
-                <h2 className="text-yellow-400 text-3xl font-bold tracking-widest uppercase mb-2">Aurum</h2>
-                <div className="w-12 h-px bg-yellow-400/40 mx-auto" />
+                <img src="/logo.png" alt="Golden Heights Group" className="h-24 w-auto mx-auto mb-2" />
               </div>
 
               <h3 className="text-white text-xl font-semibold text-center mb-3">

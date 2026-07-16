@@ -11,7 +11,7 @@ function SobreNosotros() {
 
       <div className="text-center mb-16">
         <p className="text-yellow-400 text-sm tracking-widest uppercase mb-2">Quiénes somos</p>
-        <h1 className="text-5xl font-bold text-white">Sobre Aurum</h1>
+        <h1 className="text-5xl font-bold text-white">Sobre Golden Heights Group</h1>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-16 mb-20">
@@ -23,7 +23,7 @@ function SobreNosotros() {
         >
           <h2 className="text-2xl font-bold text-white mb-6">Nuestra historia</h2>
           <p className="text-zinc-400 leading-relaxed mb-4">
-            Aurum nació con una misión clara: democratizar el acceso a la inversión en metales preciosos. Durante años, este mercado estuvo reservado a grandes inversores y entidades financieras. Nosotros lo cambiamos.
+            Golden Heights Group nació con una misión clara: democratizar el acceso a la inversión en metales preciosos. Durante años, este mercado estuvo reservado a grandes inversores y entidades financieras. Nosotros lo cambiamos.
           </p>
           <p className="text-zinc-400 leading-relaxed mb-4">
             Desde nuestros inicios hemos trabajado con los principales refinadores y acuñadoras del mundo para ofrecer productos de la máxima calidad y pureza, con total transparencia en precios y procedencia.

@@ -35,7 +35,7 @@ function LoadingScreen() {
             className="text-center"
           >
             <h1 className="text-yellow-400 text-6xl font-bold tracking-widest uppercase mb-2">
-              Aurum
+              Golden Heights Group
             </h1>
             <p className="text-zinc-500 text-xs tracking-widest uppercase mb-12">
               Metales preciosos de inversión

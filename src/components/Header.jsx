@@ -62,7 +62,12 @@ function Header() {
       </div>
 
       <div className="px-6 py-4 flex items-center justify-between">
-        <Link to="/" className="text-yellow-400 text-2xl font-bold tracking-widest uppercase">Aurum</Link>
+        <Link to="/" className="flex items-center gap-3">
+          <img src="/logo-icono.png" alt="Golden Heights" className="h-8 w-auto" />
+          <span className="text-yellow-400 text-lg font-bold tracking-widest uppercase leading-none hidden sm:block">
+            Golden Heights
+          </span>
+        </Link>
 
         <nav className="hidden lg:flex items-center gap-6 text-sm text-zinc-300">
           <Link to="/" className="hover:text-yellow-400 transition-colors">Inicio</Link>

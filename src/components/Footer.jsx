@@ -8,7 +8,7 @@ function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
 
           <div className="col-span-1 md:col-span-2">
-            <h3 className="text-yellow-400 text-2xl font-bold tracking-widest uppercase mb-4">Aurum</h3>
+            <h3 className="text-yellow-400 text-2xl font-bold tracking-widest uppercase mb-4">Golden Heights Group</h3>
             <p className="text-zinc-400 text-sm leading-relaxed max-w-sm">
               Especialistas en metales preciosos de inversión. Lingotes y monedas de oro, plata y platino certificados con los más altos estándares de calidad.
             </p>
@@ -46,7 +46,7 @@ function Footer() {
         </div>
 
         <div className="border-t border-zinc-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-zinc-500 text-xs">© 2025 Aurum. Todos los derechos reservados.</p>
+          <p className="text-zinc-500 text-xs">© 2025 Golden Heights Group. Todos los derechos reservados.</p>
           <div className="flex gap-6">
             <a href="#" className="text-zinc-500 text-xs hover:text-yellow-400 transition-colors">Política de privacidad</a>
             <a href="#" className="text-zinc-500 text-xs hover:text-yellow-400 transition-colors">Cookies</a>

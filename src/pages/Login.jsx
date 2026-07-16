@@ -39,7 +39,7 @@ function Login() {
     <div className="min-h-[80vh] flex items-center justify-center px-6">
       <div className="w-full max-w-sm">
         <div className="text-center mb-10">
-          <h1 className="text-yellow-400 text-2xl font-bold tracking-widest uppercase mb-2">Aurum</h1>
+          <img src="/logo.png" alt="Golden Heights Group" className="h-20 w-auto mx-auto mb-3" />
           <p className="text-zinc-500 text-sm">Acceso administración</p>
         </div>
 

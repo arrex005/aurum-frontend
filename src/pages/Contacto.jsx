@@ -54,7 +54,7 @@ function Contacto() {
             </div>
             <div className="border-l-2 border-yellow-400 pl-4">
               <p className="text-zinc-400 text-xs uppercase tracking-widest mb-1">Email</p>
-              <p className="text-white">info@aurum.es</p>
+              <p className="text-white">info@goldenheights.es</p>
             </div>
             <div className="border-l-2 border-yellow-400 pl-4">
               <p className="text-zinc-400 text-xs uppercase tracking-widest mb-1">Dirección</p>
