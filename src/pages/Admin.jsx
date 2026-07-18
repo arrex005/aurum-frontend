@@ -210,14 +210,19 @@ function Admin() {
                     exit={{ opacity: 0, x: -20 }}
                     className={c.aprobado ? 'border p-5 border-zinc-800 bg-zinc-900 flex items-center justify-between' : 'border p-5 border-yellow-400/40 bg-zinc-900 flex items-center justify-between'}
                   >
-                    <div>
-                      <div className="flex items-center gap-2 mb-1">
+<div>
+                      <div className="flex items-center gap-2 mb-1 flex-wrap">
                         {!c.aprobado && <span className="w-2 h-2 bg-yellow-400 rounded-full"></span>}
-                        <p className="text-white font-semibold">{c.nombre}</p>
-                        {c.aprobado && <span className="text-xs bg-green-400/10 text-green-400 px-2 py-0.5">Aprobado</span>}
-                        {!c.aprobado && <span className="text-xs bg-yellow-400/10 text-yellow-400 px-2 py-0.5">Pendiente</span>}
+                        <p className="text-white font-semibold">{c.nombre} {c.apellidos}</p>
+                        {c.aprobado
+                          ? <span className="text-xs bg-green-400/10 text-green-400 px-2 py-0.5">Aprobado</span>
+                          : <span className="text-xs bg-yellow-400/10 text-yellow-400 px-2 py-0.5">Pendiente</span>}
+                        {c.emailVerificado
+                          ? <span className="text-xs bg-blue-400/10 text-blue-400 px-2 py-0.5">✓ Email verificado</span>
+                          : <span className="text-xs bg-red-400/10 text-red-400 px-2 py-0.5">✗ Sin verificar</span>}
                       </div>
-                      <p className="text-zinc-500 text-xs">{c.email}</p>
+                      <p className="text-zinc-400 text-xs">{c.email}</p>
+                      {c.telefono && <p className="text-zinc-400 text-xs mt-0.5">📞 {c.telefono}</p>}
                       <p className="text-zinc-600 text-xs mt-1">Registrado el {new Date(c.createdAt).toLocaleDateString('es-ES')}</p>
                     </div>
                     <div className="flex gap-2">
