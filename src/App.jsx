@@ -27,6 +27,7 @@ import Piedras from './pages/Piedras'
 import RutaProtegida from './components/RutaProtegida'
 import MiCuenta from './pages/MiCuenta'
 import DiamanteDetalle from './pages/DiamanteDetalle'
+import Carrito from './pages/Carrito'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -85,7 +86,8 @@ function App() {
           <Route path="/acceso" element={<PageWrapper><Acceso /></PageWrapper>} />
           <Route path="/diamantes" element={<PageWrapper><Piedras /></PageWrapper>} />
           <Route path="/diamante/:id" element={<PageWrapper><DiamanteDetalle /></PageWrapper>} />
-
+          <Route path="/carrito" element={<PageWrapper><Carrito /></PageWrapper>} />
+          
           <Route path="/mi-cuenta" element={<PageWrapper><MiCuenta/></PageWrapper>} />
         </Routes>
       </AnimatePresence>

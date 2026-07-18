@@ -1,12 +1,14 @@
 import { Link } from 'react-router-dom'
 import { useState, useEffect, useRef } from 'react'
 import BuscadorGlobal from './BuscadorGlobal'
+import { useCarrito } from '../context/CarritoContext'
 
 function Header() {
   const [precios, setPrecios] = useState([])
   const [herramientasAbierto, setHerramientasAbierto] = useState(false)
   const [menuMovil, setMenuMovil] = useState(false)
   const dropdownRef = useRef(null)
+  const { cantidad } = useCarrito()
 
   const fetchPrecios = () => {
     fetch(`${import.meta.env.VITE_API_URL}/api/precios`)
@@ -73,8 +75,8 @@ function Header() {
           <Link to="/" className="hover:text-yellow-400 transition-colors">Inicio</Link>
           <Link to="/catalogo" className="hover:text-yellow-400 transition-colors">Catálogo</Link>
           <Link to="/diamantes" className="hover:text-yellow-400 transition-colors flex items-center gap-1">
-               Diamantes
-              <span className="bg-yellow-400 text-black text-[9px] font-bold px-1.5 py-0.5 rounded">NEW</span>
+            Diamantes
+            <span className="bg-yellow-400 text-black text-[9px] font-bold px-1.5 py-0.5 rounded">NEW</span>
           </Link>
           <Link to="/precios" className="hover:text-yellow-400 transition-colors">Precios</Link>
 
@@ -110,6 +112,8 @@ function Header() {
           <Link to="/blog" className="hover:text-yellow-400 transition-colors">Historia</Link>
           <Link to="/contacto" className="hover:text-yellow-400 transition-colors">Contacto</Link>
 
+          
+
           {estaLogueado ? (
             <Link to="/mi-cuenta" className="text-xs bg-yellow-400 text-black font-semibold px-4 py-1.5 hover:bg-yellow-300 transition-colors">
               Mi cuenta
@@ -121,8 +125,20 @@ function Header() {
           )}
         </nav>
 
-        <div className="hidden lg:block">
+        <div className="hidden lg:flex items-center gap-4">
           <BuscadorGlobal />
+          <Link to="/carrito" className="relative bg-yellow-400 text-black p-2 rounded hover:bg-yellow-300 transition-colors" aria-label="Carrito">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="9" cy="21" r="1"></circle>
+              <circle cx="20" cy="21" r="1"></circle>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+            {cantidad > 0 && (
+              <span className="absolute -top-2 -right-2 bg-black text-yellow-400 text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border border-yellow-400">
+                {cantidad}
+              </span>
+            )}
+          </Link>
         </div>
 
         <button
@@ -143,10 +159,18 @@ function Header() {
           <Link to="/comparador" onClick={() => setMenuMovil(false)} className="hover:text-yellow-400 transition-colors py-1">Comparador</Link>
           <Link to="/blog" onClick={() => setMenuMovil(false)} className="hover:text-yellow-400 transition-colors py-1">Historia</Link>
           <Link to="/contacto" onClick={() => setMenuMovil(false)} className="hover:text-yellow-400 transition-colors py-1">Contacto</Link>
+          <Link to="/carrito" onClick={() => setMenuMovil(false)} className="hover:text-yellow-400 transition-colors py-1">
+            Carrito {cantidad > 0 && <span className="text-yellow-400">({cantidad})</span>}
+          </Link>
           {estaLogueado ? (
-            <button onClick={cerrarSesion} className="text-left text-zinc-400 hover:text-yellow-400 transition-colors py-1">
-              Cerrar sesión
-            </button>
+            <>
+              <Link to="/mi-cuenta" onClick={() => setMenuMovil(false)} className="text-yellow-400 font-semibold py-1">
+                Mi cuenta
+              </Link>
+              <button onClick={cerrarSesion} className="text-left text-zinc-400 hover:text-yellow-400 transition-colors py-1">
+                Cerrar sesión
+              </button>
+            </>
           ) : (
             <Link to="/acceso" onClick={() => setMenuMovil(false)} className="text-yellow-400 font-semibold py-1">
               Acceder

@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import PrecioProtegido from '../components/PrecioProtegido'
+import { useCarrito } from '../context/CarritoContext'
 
 function ProductoDetalle() {
   const { id } = useParams()
   const navigate = useNavigate()
   const [producto, setProducto] = useState(null)
   const [cargando, setCargando] = useState(true)
+  const { añadir, items } = useCarrito()
 
   useEffect(() => {
     const token = localStorage.getItem('clienteToken')
@@ -76,12 +78,49 @@ function ProductoDetalle() {
             <p className="text-zinc-500 text-xs mt-1">Precio orientativo, consulte para precio exacto</p>
           </div>
 
-          <button
-            onClick={() => navigate('/contacto')}
-            className="w-full bg-yellow-400 text-black font-semibold py-4 hover:bg-yellow-300 transition-colors"
-          >
-            Solicitar información
-          </button>
+          {(() => {
+            const estaLogueado = !!localStorage.getItem('clienteToken')
+            const yaEnCarrito = items.find((p) => p.id === producto.id && p.tipo === 'producto')
+
+            if (!estaLogueado || !producto.precio) {
+              return (
+                <button
+                  onClick={() => navigate('/acceso')}
+                  className="w-full bg-yellow-400 text-black font-semibold py-4 hover:bg-yellow-300 transition-colors"
+                >
+                  Inicia sesión para comprar
+                </button>
+              )
+            }
+
+            if (yaEnCarrito) {
+              return (
+                <button
+                  onClick={() => navigate('/carrito')}
+                  className="w-full border border-yellow-400 text-yellow-400 font-semibold py-4 hover:bg-yellow-400/10 transition-colors"
+                >
+                  Ya está en el carrito · Ver carrito
+                </button>
+              )
+            }
+
+            return (
+              <button
+                onClick={() => añadir({
+                  id: producto.id,
+                  tipo: 'producto',
+                  nombre: producto.nombre,
+                  precio: producto.precio,
+                  metal: producto.metal,
+                  peso: producto.peso,
+                  imagen: producto.imagen,
+                })}
+                className="w-full bg-yellow-400 text-black font-semibold py-4 hover:bg-yellow-300 transition-colors"
+              >
+                Añadir al carrito
+              </button>
+            )
+          })()}
         </div>
 
       </div>
