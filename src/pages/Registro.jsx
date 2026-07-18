@@ -2,21 +2,10 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 
-const provincias = [
-  'Álava', 'Albacete', 'Alicante', 'Almería', 'Asturias', 'Ávila', 'Badajoz', 'Barcelona',
-  'Burgos', 'Cáceres', 'Cádiz', 'Cantabria', 'Castellón', 'Ciudad Real', 'Córdoba', 'La Coruña',
-  'Cuenca', 'Gerona', 'Granada', 'Guadalajara', 'Guipúzcoa', 'Huelva', 'Huesca', 'Islas Baleares',
-  'Jaén', 'León', 'Lérida', 'Lugo', 'Madrid', 'Málaga', 'Murcia', 'Navarra', 'Orense', 'Palencia',
-  'Las Palmas', 'Pontevedra', 'La Rioja', 'Salamanca', 'Santa Cruz de Tenerife', 'Segovia',
-  'Sevilla', 'Soria', 'Tarragona', 'Teruel', 'Toledo', 'Valencia', 'Valladolid', 'Vizcaya',
-  'Zamora', 'Zaragoza', 'Ceuta', 'Melilla'
-]
-
 function Registro() {
   const [paso, setPaso] = useState(1)
   const [form, setForm] = useState({
-    nombre: '', apellidos: '', email: '', password: '', telefono: '',
-    direccion: '', codigoPostal: '', ciudad: '', provincia: '',
+    nombre: '', apellidos: '', email: '', telefono: '', password: '',
   })
   const [codigo, setCodigo] = useState('')
   const [error, setError] = useState('')
@@ -27,29 +16,46 @@ function Registro() {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
+  // Validación en el navegador antes de enviar
+  const validar = () => {
+    const soloLetras = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s'-]+$/
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    const movilOk = /^[67][0-9]{8}$/
+
+    if (!soloLetras.test(form.nombre.trim())) return 'El nombre solo puede contener letras'
+    if (!soloLetras.test(form.apellidos.trim())) return 'Los apellidos solo pueden contener letras'
+    if (!emailOk.test(form.email.trim())) return 'Introduce un email válido'
+    if (form.telefono.trim() && !movilOk.test(form.telefono.trim())) return 'Si indicas teléfono, debe ser un móvil español (9 dígitos, empieza por 6 o 7)'
+    if (form.password.length < 6) return 'La contraseña debe tener al menos 6 caracteres'
+    return null
+  }
+
   const handleRegistro = async (e) => {
     e.preventDefault()
     setError('')
-    setCargando(true)
 
+    const errorValidacion = validar()
+    if (errorValidacion) {
+      setError(errorValidacion)
+      return
+    }
+
+    setCargando(true)
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/clientes/registro`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
       })
-
       const data = await res.json()
-
       if (res.ok) {
-        setPaso(2) // pasamos a la pantalla del código
+        setPaso(2)
       } else {
         setError(data.error || 'Error al registrarse')
       }
     } catch {
       setError('Error de conexión')
     }
-
     setCargando(false)
   }
 
@@ -57,25 +63,21 @@ function Registro() {
     e.preventDefault()
     setError('')
     setCargando(true)
-
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/clientes/verificar`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: form.email, codigo }),
       })
-
       const data = await res.json()
-
       if (res.ok) {
-        setPaso(3) // pantalla de éxito
+        setPaso(3)
       } else {
         setError(data.error || 'Código incorrecto')
       }
     } catch {
       setError('Error de conexión')
     }
-
     setCargando(false)
   }
 
@@ -87,7 +89,7 @@ function Registro() {
           <p className="text-yellow-400 text-5xl mb-4">✓</p>
           <h1 className="text-2xl font-bold text-white mb-3">Email verificado</h1>
           <p className="text-zinc-400 text-sm mb-8">
-            Tu cuenta ha sido verificada y está pendiente de aprobación. Te avisaremos cuando puedas acceder a los precios.
+            Tu cuenta ha sido verificada y está pendiente de aprobación. Te avisaremos por email cuando puedas acceder a los precios.
           </p>
           <Link to="/" className="text-yellow-400 text-sm hover:underline">Volver al inicio</Link>
         </motion.div>
@@ -95,13 +97,14 @@ function Registro() {
     )
   }
 
-  // PASO 2: Introducir código
+  // PASO 2: Código
   if (paso === 2) {
     return (
       <div className="min-h-[80vh] flex items-center justify-center px-6">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-sm">
           <div className="text-center mb-8">
-            <h1 className="text-yellow-400 text-2xl font-bold tracking-widest uppercase mb-2">Verificación</h1>
+            <img src="/logo.png" alt="Golden Heights Group" className="h-20 w-auto mx-auto mb-3" />
+            <h1 className="text-white text-xl font-semibold mb-2">Verifica tu email</h1>
             <p className="text-zinc-400 text-sm">
               Hemos enviado un código de 6 dígitos a<br />
               <span className="text-white">{form.email}</span>
@@ -137,17 +140,16 @@ function Registro() {
     )
   }
 
-  // PASO 1: Formulario de registro
+  // PASO 1: Formulario
   return (
     <div className="min-h-[80vh] flex items-center justify-center px-6 py-12">
-      <div className="w-full max-w-lg">
+      <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-yellow-400 text-2xl font-bold tracking-widest uppercase mb-2">Crear cuenta</h1>
-          <p className="text-zinc-500 text-sm">Regístrate para ver los precios</p>
+          <img src="/logo.png" alt="Golden Heights Group" className="h-20 w-auto mx-auto mb-3" />
+          <p className="text-zinc-500 text-sm">Crea tu cuenta para ver los precios</p>
         </div>
 
-        <form onSubmit={handleRegistro} className="space-y-4">
-
+        <form onSubmit={handleRegistro} className="space-y-4" noValidate>
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="text-zinc-400 text-xs uppercase tracking-widest mb-2 block">Nombre</label>
@@ -167,44 +169,17 @@ function Registro() {
               className="w-full bg-zinc-900 border border-zinc-700 text-white px-4 py-3 text-sm focus:outline-none focus:border-yellow-400 transition-colors" />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="text-zinc-400 text-xs uppercase tracking-widest mb-2 block">Contraseña</label>
-              <input type="password" name="password" value={form.password} onChange={handleChange} required minLength={6}
-                className="w-full bg-zinc-900 border border-zinc-700 text-white px-4 py-3 text-sm focus:outline-none focus:border-yellow-400 transition-colors" />
-            </div>
-            <div>
-              <label className="text-zinc-400 text-xs uppercase tracking-widest mb-2 block">Teléfono</label>
-              <input type="tel" name="telefono" value={form.telefono} onChange={handleChange} required
-                className="w-full bg-zinc-900 border border-zinc-700 text-white px-4 py-3 text-sm focus:outline-none focus:border-yellow-400 transition-colors" />
-            </div>
+          <div>
+            <label className="text-zinc-400 text-xs uppercase tracking-widest mb-2 block">Teléfono móvil <span className="text-zinc-600 normal-case">(opcional)</span></label>
+<input type="tel" name="telefono" value={form.telefono} onChange={handleChange}
+  placeholder="600 000 000"
+  className="w-full bg-zinc-900 border border-zinc-700 text-white px-4 py-3 text-sm focus:outline-none focus:border-yellow-400 transition-colors" />
           </div>
 
           <div>
-            <label className="text-zinc-400 text-xs uppercase tracking-widest mb-2 block">Dirección</label>
-            <input type="text" name="direccion" value={form.direccion} onChange={handleChange} required
+            <label className="text-zinc-400 text-xs uppercase tracking-widest mb-2 block">Contraseña</label>
+            <input type="password" name="password" value={form.password} onChange={handleChange} required minLength={6}
               className="w-full bg-zinc-900 border border-zinc-700 text-white px-4 py-3 text-sm focus:outline-none focus:border-yellow-400 transition-colors" />
-          </div>
-
-          <div className="grid grid-cols-3 gap-4">
-            <div>
-              <label className="text-zinc-400 text-xs uppercase tracking-widest mb-2 block">C.P.</label>
-              <input type="text" name="codigoPostal" value={form.codigoPostal} onChange={handleChange} required
-                className="w-full bg-zinc-900 border border-zinc-700 text-white px-4 py-3 text-sm focus:outline-none focus:border-yellow-400 transition-colors" />
-            </div>
-            <div>
-              <label className="text-zinc-400 text-xs uppercase tracking-widest mb-2 block">Ciudad</label>
-              <input type="text" name="ciudad" value={form.ciudad} onChange={handleChange} required
-                className="w-full bg-zinc-900 border border-zinc-700 text-white px-4 py-3 text-sm focus:outline-none focus:border-yellow-400 transition-colors" />
-            </div>
-            <div>
-              <label className="text-zinc-400 text-xs uppercase tracking-widest mb-2 block">Provincia</label>
-              <select name="provincia" value={form.provincia} onChange={handleChange} required
-                className="w-full bg-zinc-900 border border-zinc-700 text-white px-3 py-3 text-sm focus:outline-none focus:border-yellow-400 transition-colors">
-                <option value="">—</option>
-                {provincias.map((p) => <option key={p} value={p}>{p}</option>)}
-              </select>
-            </div>
           </div>
 
           {error && <p className="text-red-400 text-sm text-center">{error}</p>}
