@@ -150,7 +150,7 @@ function Registro() {
         </div>
 
         <form onSubmit={handleRegistro} className="space-y-4" noValidate>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="text-zinc-400 text-xs uppercase tracking-widest mb-2 block">Nombre</label>
               <input type="text" name="nombre" value={form.nombre} onChange={handleChange} required

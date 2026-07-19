@@ -43,7 +43,7 @@ function Header() {
 
   return (
     <header className="bg-zinc-900 border-b border-yellow-400/20 sticky top-0 z-50">
-      <div className="bg-black/60 px-6 py-2 flex gap-6 text-sm border-b border-zinc-800 overflow-x-auto">
+      <div className="bg-black/60 px-3 sm:px-6 py-2 flex gap-4 sm:gap-6 text-xs sm:text-sm border-b border-zinc-800 overflow-x-auto whitespace-nowrap">
         {precios.length === 0 ? (
           <span className="text-zinc-500 text-xs">Cargando precios...</span>
         ) : (
@@ -63,7 +63,7 @@ function Header() {
         )}
       </div>
 
-      <div className="px-6 py-4 flex items-center justify-between">
+      <div className="px-4 sm:px-6 py-4 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-3">
           <img src="/logo-icono.png" alt="Golden Heights" className="h-8 w-auto" />
           <span className="text-yellow-400 text-lg font-bold tracking-widest uppercase leading-none hidden sm:block">

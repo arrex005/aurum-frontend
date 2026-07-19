@@ -55,9 +55,9 @@ function Carrito() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, x: -20 }}
-              className="bg-zinc-900 border border-zinc-800 p-4 flex items-center gap-4"
+              className="bg-zinc-900 border border-zinc-800 p-3 sm:p-4 flex items-center gap-3 sm:gap-4"
             >
-              <div className="w-16 h-16 bg-zinc-800 flex-shrink-0 flex items-center justify-center overflow-hidden">
+              <div className="w-14 h-14 sm:w-16 sm:h-16 bg-zinc-800 flex-shrink-0 flex items-center justify-center overflow-hidden">
                 {item.imagen ? (
                   <img src={item.imagen} alt={item.nombre} className="w-full h-full object-cover" />
                 ) : (
@@ -66,17 +66,18 @@ function Carrito() {
               </div>
 
               <div className="flex-1 min-w-0">
-                <p className="text-white font-semibold text-sm">{item.nombre}</p>
+                <p className="text-white font-semibold text-sm leading-snug">{item.nombre}</p>
                 <p className="text-zinc-500 text-xs mt-0.5">
                   {item.tipo === 'diamante' ? 'Diamante' : `${item.metal} · ${item.peso}`}
                 </p>
+                <p className="text-yellow-400 font-bold text-sm mt-1 sm:hidden">{formatoPrecio(item.precio)}</p>
               </div>
 
-              <p className="text-yellow-400 font-bold whitespace-nowrap">{formatoPrecio(item.precio)}</p>
+              <p className="text-yellow-400 font-bold whitespace-nowrap hidden sm:block">{formatoPrecio(item.precio)}</p>
 
               <button
                 onClick={() => quitar(item.id, item.tipo)}
-                className="text-zinc-600 hover:text-red-400 transition-colors ml-2"
+                className="text-zinc-600 hover:text-red-400 transition-colors flex-shrink-0"
                 aria-label="Quitar"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

@@ -30,14 +30,14 @@ function Comparador() {
   const hayPrecios = productoA?.precio && productoB?.precio
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-16">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
 
-      <div className="text-center mb-12">
-        <p className="text-yellow-400 text-sm tracking-widest uppercase mb-2">Herramienta de análisis</p>
-        <h1 className="text-5xl font-bold text-white">Comparador de productos</h1>
+      <div className="text-center mb-8 sm:mb-12">
+        <p className="text-yellow-400 text-xs sm:text-sm tracking-widest uppercase mb-2">Herramienta de análisis</p>
+        <h1 className="text-3xl sm:text-5xl font-bold text-white">Comparador</h1>
       </div>
 
-      <div className="grid grid-cols-2 gap-6 mb-12">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-8 sm:mb-12">
         <div>
           <label className="text-zinc-400 text-xs uppercase tracking-widest mb-2 block">Producto A</label>
           <select
@@ -72,47 +72,38 @@ function Comparador() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
         >
-          <div className="grid grid-cols-3 gap-0 border border-zinc-800">
+          {/* Cabecera con los dos nombres */}
+          <div className="grid grid-cols-2 gap-3 mb-3">
+            <div className="bg-zinc-900 border border-zinc-800 p-3 text-center">
+              <p className="text-yellow-400 text-xs sm:text-sm font-semibold">{productoA.nombre}</p>
+            </div>
+            <div className="bg-zinc-900 border border-zinc-800 p-3 text-center">
+              <p className="text-yellow-400 text-xs sm:text-sm font-semibold">{productoB.nombre}</p>
+            </div>
+          </div>
 
-            <div className="bg-zinc-900 p-4 border-r border-zinc-800">
-              <p className="text-zinc-500 text-xs uppercase tracking-widest">Característica</p>
-            </div>
-            <div className="bg-zinc-900 p-4 border-r border-zinc-800 text-center">
-              <p className="text-yellow-400 text-sm font-semibold">{productoA.nombre}</p>
-            </div>
-            <div className="bg-zinc-900 p-4 text-center">
-              <p className="text-yellow-400 text-sm font-semibold">{productoB.nombre}</p>
-            </div>
-
+          {/* Filas de características */}
+          <div className="border border-zinc-800">
             {campos.map((campo, i) => (
-              <div key={`fila-${i}`} className="contents">
-                <div className="p-4 border-t border-r border-zinc-800">
-                  <p className="text-zinc-400 text-sm">{campo.label}</p>
-                </div>
-                <div className="p-4 border-t border-r border-zinc-800 text-center">
-                  <p className={`text-sm font-semibold ${
-                    campo.key === 'precio' && hayPrecios
-                      ? productoA.precio < productoB.precio ? 'text-green-400' : 'text-white'
-                      : 'text-white'
+              <div key={i} className={`${i > 0 ? 'border-t border-zinc-800' : ''}`}>
+                <p className="text-zinc-500 text-[10px] uppercase tracking-widest text-center pt-2">{campo.label}</p>
+                <div className="grid grid-cols-2">
+                  <p className={`text-sm font-semibold text-center pb-2 px-2 ${
+                    campo.key === 'precio' && hayPrecios && productoA.precio < productoB.precio ? 'text-green-400' : 'text-white'
                   }`}>
                     {campo.format ? campo.format(productoA[campo.key]) : productoA[campo.key]}
                   </p>
-                </div>
-                <div className="p-4 border-t border-zinc-800 text-center">
-                  <p className={`text-sm font-semibold ${
-                    campo.key === 'precio' && hayPrecios
-                      ? productoB.precio < productoA.precio ? 'text-green-400' : 'text-white'
-                      : 'text-white'
+                  <p className={`text-sm font-semibold text-center pb-2 px-2 border-l border-zinc-800 ${
+                    campo.key === 'precio' && hayPrecios && productoB.precio < productoA.precio ? 'text-green-400' : 'text-white'
                   }`}>
                     {campo.format ? campo.format(productoB[campo.key]) : productoB[campo.key]}
                   </p>
                 </div>
               </div>
             ))}
-
           </div>
 
-          <div className="mt-6 p-6 bg-zinc-900 border border-zinc-800">
+          <div className="mt-6 p-5 sm:p-6 bg-zinc-900 border border-zinc-800">
             <p className="text-zinc-400 text-sm text-center">
               {!hayPrecios
                 ? 'Inicia sesión para comparar los precios'
@@ -128,7 +119,7 @@ function Comparador() {
       )}
 
       {(!productoA || !productoB) && (
-        <div className="text-center py-20 border border-zinc-800 text-zinc-600">
+        <div className="text-center py-16 sm:py-20 border border-zinc-800 text-zinc-600 text-sm px-4">
           Selecciona dos productos para compararlos
         </div>
       )}
